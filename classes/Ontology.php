@@ -39,7 +39,7 @@ class Ontology implements \JsonSerializable
     /**
      * @return array
      */
-    public function getOntology(): array
+    public function getOntology()
     {
         return $this->ontology;
     }
@@ -55,7 +55,7 @@ class Ontology implements \JsonSerializable
     /**
      * @return array
      */
-    public function getProperties(): array
+    public function getProperties()
     {
         return $this->properties;
     }
@@ -95,7 +95,7 @@ class Ontology implements \JsonSerializable
     /**
      * @param mixed $slug
      */
-    public function setSlug($slug): void
+    public function setSlug($slug)
     {
         $this->slug = $slug;
     }

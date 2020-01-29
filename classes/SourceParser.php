@@ -96,7 +96,7 @@ class SourceParser
     /**
      * @return array
      */
-    public function getClasses(): array
+    public function getClasses()
     {
         return $this->classes;
     }

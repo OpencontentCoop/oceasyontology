@@ -1,3 +1,8 @@
+{if is_set($error)}
+<div class="alert alert-danger">
+    {$error|wash()}
+</div>
+{else}
 <h2>
     {$collection.classSchema.name[$locale]|wash()} - {$map.slug|wash()}
     <a href="{concat('easyontology/mapper/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}"><img src={"edit.gif"|ezimage} alt="{'Edit'|i18n( 'easyontology/dashboard' )}" /></a>
@@ -55,3 +60,4 @@
         </tr>
     {/foreach}
 </table>
+{/if}

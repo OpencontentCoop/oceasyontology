@@ -43,7 +43,7 @@ class MapCollection implements \JsonSerializable
     /**
      * @param mixed $classIdentifier
      */
-    public function setClassIdentifier($classIdentifier): void
+    public function setClassIdentifier($classIdentifier)
     {
         $this->classIdentifier = $classIdentifier;
     }
@@ -56,9 +56,19 @@ class MapCollection implements \JsonSerializable
         return $this->maps;
     }
 
+    public function hasMaps()
+    {
+        return count($this->maps) > 0;
+    }
+
     public function addMap(Map $map)
     {
         $this->maps[$map->getSlug()] = $map;
+    }
+
+    public function removeMap(Map $map)
+    {
+        unset($this->maps[$map->getSlug()]);
     }
 
     public function hasMap(Map $map)
@@ -98,7 +108,7 @@ class MapCollection implements \JsonSerializable
     /**
      * @param mixed $classSchema
      */
-    public function setClassSchema($classSchema): void
+    public function setClassSchema($classSchema)
     {
         $this->classSchema = $classSchema;
     }

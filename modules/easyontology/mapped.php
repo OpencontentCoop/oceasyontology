@@ -1,7 +1,6 @@
 <?php
 
 use Opencontent\Easyontology\MapperRegistry;
-use Opencontent\Easyontology\Map;
 
 /** @var eZModule $module */
 $module = $Params["Module"];
@@ -20,7 +19,9 @@ $tpl->setVariable('class', $contentClass);
 try {
     $collection = MapperRegistry::fetchMapCollectionByClassIdentifier($classIdentifier);
     $map = $collection->findMapBySlug($mapSlug);
-
+    if (!$map){
+        throw new Exception('Map not found');
+    }
     $mapArray = $map->jsonSerialize();
     $mapArray['properties'] = $map->getProperties();
     $mapArray['grouped_properties'] = $map->getGroupedProperties();

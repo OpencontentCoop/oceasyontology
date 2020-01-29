@@ -1,19 +1,17 @@
 {if count($collections)}
     <h2>{'Mapped classes'|i18n( 'easyontology/dashboard' )}</h2>
     <table class="table list table-striped">
-        {foreach $collections as $collection}
-            <tr>
-                <td>{fetch(content, class, hash(class_id, $collection.classIdentifier)).name|wash()}</td>
-                <td>
-                    {foreach $collection.maps as $map}
-                        <p>
-                            <a href="{concat('easyontology/mapped/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}">{$map.slug|wash()}</a>
-
-                            <a href="{concat('easyontology/mapper/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}"><img src={"edit.gif"|ezimage} alt="{'Edit'|i18n( 'easyontology/dashboard' )}" /></a>
-                        </p>
-                    {/foreach}
-                </td>
+        {foreach $collections as $collection sequence array( bgdark, bglight ) as $sequence}
+            <tr class="{$sequence}">
+                <td rowspan="{count($collection.maps)|inc()}">{fetch(content, class, hash(class_id, $collection.classIdentifier)).name|wash()}</td>
             </tr>
+            {foreach $collection.maps as $map}
+            <tr class="{$sequence}">
+                <td><a href="{concat('easyontology/mapped/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}">{$map.slug|wash()}</a></td>
+                <td><a href="{concat('easyontology/mapper/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}"><img src={"edit.png"|ezimage} alt="{'Edit'|i18n( 'easyontology/dashboard' )}" /></a></td>
+                <td><a href="{concat('easyontology/remove/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}"><img src={"trash.png"|ezimage} alt="{'Remove'|i18n( 'easyontology/dashboard' )}" /></a></td>
+            </tr>
+            {/foreach}
         {/foreach}
     </table>
 {/if}
@@ -23,12 +21,10 @@
     <div class="block float-break clearfix">
         <div class="element">
             {def $classlist = fetch( 'class', 'list', hash( 'sort_by', array( 'name', true() ) ) )}
-            <label for="classIdentifier">{'Classes list'|i18n( 'easyontology/dashboard' )}</label>
+            <label class="hide hidden" for="classIdentifier">{'Classes list'|i18n( 'easyontology/dashboard' )}</label>
             <select name="classIdentifier" id="classIdentifier">
                 {foreach $classlist as $class}
-                    {if $already_mapped|contains($class.identifier)|not()}
-                        <option value="{$class.identifier|wash()}">{$class.name|wash()}</option>
-                    {/if}
+                    <option value="{$class.identifier|wash()}">{$class.name|wash()}</option>
                 {/foreach}
             </select>
             {undef $classlist}
@@ -44,8 +40,8 @@
 {if $ontologies|count()}
     <h2>{'Ontologies'|i18n( 'easyontology/dashboard' )}</h2>
     <table class="table list table-striped">
-        {foreach $ontologies as $ontology}
-            <tr>
+        {foreach $ontologies as $ontology sequence array( bgdark, bglight ) as $sequence}
+            <tr class="{$sequence}">
                 <td>
                     <a href="{concat('easyontology/inspect/', $ontology.slug)|ezurl(no)}">{$ontology.uri|wash()}</a>
                 </td>

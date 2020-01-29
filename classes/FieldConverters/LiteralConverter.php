@@ -27,7 +27,7 @@ class LiteralConverter extends AbstractFieldConverter
             }
         }
 
-        if ($this->rdfRange == FieldConverterFactory::SCHEMA_BOOLEAN || $this->rdfRange == FieldConverterFactory::SCHEMA_INTEGER){
+        if (strpos($this->rdfRange, 'schema.org') !== false){
             $values = array_column($values, '@value');
         }
 

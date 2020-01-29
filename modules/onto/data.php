@@ -18,6 +18,7 @@ foreach (\EasyRdf\Format::getFormats() as $format) {
 }
 
 $requestAccept = strtolower($_SERVER['HTTP_ACCEPT']);
+$getFormat = isset($_GET['format']) ? $_GET['format'] : null;
 try {
     $converter = \Opencontent\Easyontology\ConverterFactory::factory($concept, $id);
     $jsonData = $converter->jsonSerialize();
@@ -30,11 +31,11 @@ try {
 
     $uri = \Opencontent\Easyontology\ConverterHelper::generateId($concept, $id);
 
-    if (in_array($requestAccept, $headers)) {
+    if (in_array($requestAccept, $headers) || in_array($getFormat, $outputFormatOptions)) {
         $graph = new \EasyRdf\Graph($uri);
 
         $graph->parse(json_encode($jsonData), 'jsonld', $uri);
-        $format = \EasyRdf\Format::getFormat($requestAccept);
+        $format = $getFormat ? \EasyRdf\Format::getFormat($getFormat) : \EasyRdf\Format::getFormat($requestAccept);
         $output = $graph->serialise($format);
         if (!is_scalar($output)) {
             $output = var_export($output, true);

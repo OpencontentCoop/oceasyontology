@@ -33,7 +33,7 @@ $ViewList['remove'] = array(
     'script' => 'remove.php',
     "default_navigation_part" => 'ezsetupnavigationpart',
     'functions' => array('mapper'),
-    'params' => array()
+    'params' => array('ClassIdentifier', 'MapSlug')
 );
 
 $FunctionList = array();
