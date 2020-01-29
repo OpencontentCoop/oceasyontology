@@ -2,10 +2,10 @@
 
 namespace Opencontent\Easyontology\AttributeConverters;
 
-use Opencontent\Easyontology\ConverterInterface;
-use Opencontent\Easyontology\MapConverter;
+use Opencontent\Easyontology\ConverterHelper;
+use Opencontent\Easyontology\AbstractConverter;
 
-class TimeIntervalConverter implements ConverterInterface, \JsonSerializable
+class TimeIntervalConverter extends AbstractConverter
 {
     const TIME_INTERVAL_TYPE = 'https://w3id.org/italia/onto/TI/TimeInterval';
 
@@ -19,6 +19,8 @@ class TimeIntervalConverter implements ConverterInterface, \JsonSerializable
 
     private $currentRecurrence;
 
+    private $isConverted;
+
     public function __construct($concept, $id)
     {
         $this->concept = $concept;
@@ -31,74 +33,59 @@ class TimeIntervalConverter implements ConverterInterface, \JsonSerializable
             $this->recurrences = $content['recurrences'];
         }
         $this->currentRecurrence = $currentRecurrence;
+        $this->context = new \ArrayObject();
     }
 
-    public function getDoc()
+    protected function convert()
     {
-        if ($this->concept == 'time-interval') {
-            $doc = [
-                '@id' => MapConverter::generateId($this->concept, $this->id),
-                '@type' => self::TIME_INTERVAL_TYPE
-            ];
+        if (!$this->isConverted) {
+            if ($this->concept == 'time-interval') {
+                $this->doc = [
+                    '@id' => ConverterHelper::generateId($this->concept, $this->id),
+                    '@type' => ConverterHelper::compactUri(self::TIME_INTERVAL_TYPE, $this->context)
+                ];
 
-            foreach ($this->recurrences as $recurrence) {
-                if ($this->currentRecurrence == $recurrence['id']) {
-                    $doc['https://w3id.org/italia/onto/TI/startTime'] = [
-                        '@value' => $recurrence['start'],
-                        '@type' => "http://www.w3.org/2001/XMLSchema#dateTime"
-                    ];
-                    $doc['https://w3id.org/italia/onto/TI/endTime'] = [
-                        '@value' => $recurrence['end'],
-                        '@type' => "http://www.w3.org/2001/XMLSchema#dateTime"
-                    ];
+                foreach ($this->recurrences as $recurrence) {
+                    if ($this->currentRecurrence == $recurrence['id']) {
+                        $this->doc[ConverterHelper::compactUri('https://w3id.org/italia/onto/TI/startTime', $this->context)] = [
+                            '@value' => $recurrence['start'],
+                            '@type' => ConverterHelper::compactUri("http://www.w3.org/2001/XMLSchema#dateTime", $this->context)
+                        ];
+                        $this->doc[ConverterHelper::compactUri('https://w3id.org/italia/onto/TI/endTime', $this->context)] = [
+                            '@value' => $recurrence['end'],
+                            '@type' => ConverterHelper::compactUri("http://www.w3.org/2001/XMLSchema#dateTime", $this->context)
+                        ];
+                    }
+                }
+            } elseif ($this->concept == 'duration') {
+                $this->doc = [
+                    '@id' => ConverterHelper::generateId($this->concept, $this->id),
+                    '@type' => [
+                        ConverterHelper::compactUri(self::DURATION_TYPE, $this->context),
+                        ConverterHelper::compactUri('https://w3id.org/italia/onto/MU/Value', $this->context),
+                        ConverterHelper::compactUri('https://w3id.org/italia/onto/l0/Entity', $this->context)
+                    ]
+                ];
+
+                foreach ($this->recurrences as $recurrence) {
+                    if ($this->currentRecurrence == $recurrence['id']) {
+                        $start = strtotime($recurrence['start']);
+                        $end = strtotime($recurrence['end']);
+                        $duration = ($end - $start) / 60 / 60;
+                        $this->doc[ConverterHelper::compactUri('https://w3id.org/italia/onto/MU/value', $this->context)] = ['@value' => $duration];
+                        $this->doc[ConverterHelper::compactUri('https://w3id.org/italia/onto/MU/hasMeasurementUnit', $this->context)] = [
+                            '@id' => ConverterHelper::generateId($this->concept, $this->id) . '#value/measument-unit/ora',
+                            '@type' => ConverterHelper::compactUri('https://w3id.org/italia/onto/MU/MeasurementUnit', $this->context),
+                            ConverterHelper::compactUri('https://w3id.org/italia/onto/l0/name', $this->context) => ['@value' => 'Ora', '@language' => 'it']
+                        ];
+
+                    }
                 }
             }
-        } elseif ($this->concept == 'duration') {
-            $doc = [
-                '@id' => MapConverter::generateId($this->concept, $this->id),
-                '@type' => [
-                    self::DURATION_TYPE,
-                    'https://w3id.org/italia/onto/MU/Value',
-                    'https://w3id.org/italia/onto/l0/Entity'
-                ]
-            ];
 
-            foreach ($this->recurrences as $recurrence) {
-                if ($this->currentRecurrence == $recurrence['id']) {
-                    $start = strtotime($recurrence['start']);
-                    $end = strtotime($recurrence['end']);
-                    $duration = ($end - $start) / 60 / 60;
-                    $doc['https://w3id.org/italia/onto/MU/value'] = ['@value' => $duration];
-                    $doc['https://w3id.org/italia/onto/MU/hasMeasurementUnit'] = [
-                        '@id' => MapConverter::generateId($this->concept, $this->id) . '#value/measument-unit/ora',
-                        '@type' => 'https://w3id.org/italia/onto/MU/MeasurementUnit',
-                        'https://w3id.org/italia/onto/l0/name' => ['@value' => 'Ora', '@language' => 'it']
-                    ];
 
-                }
-            }
+            $this->isConverted = true;
         }
-
-
-        return $doc;
     }
-
-    public function getContext()
-    {
-        // TODO: Implement getContext() method.
-    }
-
-    public function jsonSerialize()
-    {
-        $data = [];
-        $context = $this->getContext();
-        if ($context) {
-            $data['@context'] = $context;
-        }
-
-        $data = array_merge($data, $this->getDoc());
-        return $data;
-    }
-
 
 }

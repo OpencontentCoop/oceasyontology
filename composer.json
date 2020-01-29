@@ -1,0 +1,23 @@
+{
+    "name": "opencontent/oceasyontology-ls",
+    "description": "OpenContent Easy Ontology",
+    "type": "ezpublish-legacy-extension",
+    "authors": [        
+        {
+            "name": "OpenContent",
+            "homepage": "http://www.opencontent.it"
+        }
+    ],
+    "license": "GPL-2.0",    
+    "minimum-stability": "dev",
+    "require": {
+        "ezsystems/ezpublish-legacy-installer": "*",
+        "easyrdf/easyrdf": "*",
+        "ml/json-ld": "~1.0",
+        "semsol/arc2": "~2.2"
+    },
+    "extra": {
+        "ezpublish-legacy-extension-name": "oceasyontology"
+    }
+}
+

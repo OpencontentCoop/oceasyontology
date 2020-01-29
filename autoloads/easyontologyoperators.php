@@ -29,7 +29,7 @@ class EasyontologyOperators extends eZTemplateOperator
                 $properties = $namedParameters['properties'];
                 $definition = $namedParameters['definition'];
 
-                $converter = \Opencontent\Easyontology\FieldConverterFactory::factory($properties, $definition);
+                $converter = \Opencontent\Easyontology\FieldConverterFactory::factory($properties, $definition, new ArrayObject());
                 $operatorValue = $converter instanceof \Opencontent\Easyontology\FieldConverterInterface ? get_class($converter) : '?';
 
                 break;

@@ -27,7 +27,13 @@ class FieldConverterFactory
      * @param $fieldDefinition
      * @return FieldConverterInterface|bool
      */
-    public static function factory($properties, $fieldDefinition)
+    /**
+     * @param array $properties
+     * @param array $fieldDefinition
+     * @param \ArrayObject $context
+     * @return bool|LiteralConverter
+     */
+    public static function factory($properties, $fieldDefinition, $context)
     {
         $rdfRange = false;
         if (isset($properties['schema:rangeIncludes'])) {
@@ -44,7 +50,7 @@ class FieldConverterFactory
             || ($rdfRange == self::SCHEMA_INTEGER)
             || ($rdfRange == self::SCHEMA_BOOLEAN)
         ) {
-            return new LiteralConverter($fieldDefinition, $rdfRange);
+            return new LiteralConverter($fieldDefinition, $rdfRange, $context);
         }
 
         if (isset($properties['rdf:type'])
@@ -66,7 +72,7 @@ class FieldConverterFactory
             }
 
             if ($className) {
-                return new $className($fieldDefinition, $rdfRange);
+                return new $className($fieldDefinition, $rdfRange, $context);
             }
         }
 

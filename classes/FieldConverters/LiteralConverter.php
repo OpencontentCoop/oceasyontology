@@ -27,6 +27,10 @@ class LiteralConverter extends AbstractFieldConverter
             }
         }
 
+        if ($this->rdfRange == FieldConverterFactory::SCHEMA_BOOLEAN || $this->rdfRange == FieldConverterFactory::SCHEMA_INTEGER){
+            $values = array_column($values, '@value');
+        }
+
         if (count($values) == 1){
             $values = $values[0];
         }
@@ -36,6 +40,9 @@ class LiteralConverter extends AbstractFieldConverter
 
     private function cleanValue($value)
     {
+        $value = strip_tags($value);
+        $value = trim($value);
+
         if ($this->rdfRange == FieldConverterFactory::SCHEMA_BOOLEAN){
             $value = (bool)$value;
         }

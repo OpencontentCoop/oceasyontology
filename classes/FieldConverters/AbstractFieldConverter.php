@@ -10,9 +10,21 @@ abstract class AbstractFieldConverter implements FieldConverterInterface
 
     protected $rdfRange;
 
-    public function __construct($fieldDefinition, $rdfRange)
+    /**
+     * @var \ArrayObject
+     */
+    protected $context;
+
+    /**
+     * AbstractFieldConverter constructor.
+     * @param array $fieldDefinition
+     * @param string $rdfRange
+     * @param \ArrayObject $context
+     */
+    public function __construct($fieldDefinition, $rdfRange, $context)
     {
         $this->fieldDefinition = $fieldDefinition;
         $this->rdfRange = $rdfRange;
+        $this->context = $context;
     }
 }

@@ -39,6 +39,13 @@ $tpl->setVariable('locale', eZLocale::currentLocaleCode());
 $Result = array();
 $Result['content'] = $tpl->fetch('design:easyontology/mapped.tpl');
 $Result['left_menu'] = false;
+$contentInfoArray = array( 'url_alias' => 'smartlogin/signup', 'class_identifier' => false );
+$contentInfoArray['persistent_variable'] = false;
+if ( $tpl->variable( 'persistent_variable' ) !== false )
+{
+    $contentInfoArray['persistent_variable'] = $tpl->variable( 'persistent_variable' );
+}
+$Result['content_info'] = $contentInfoArray;
 $Result['path'] = array(
     array('url' => 'easyontology/dashboard', 'text' => 'Easy ontology dashboard'),
     array('url' => false, 'text' => $contentClass->attribute('name'))
