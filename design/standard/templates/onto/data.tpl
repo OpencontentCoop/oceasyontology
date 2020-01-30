@@ -7,14 +7,14 @@
         </div>
     </div>
 {else}
-<div class="p-3">
+<div class="p-3 u-padding-all-xl">
     <h1 data-uri="{$uri|wash()}">{$uri|wash()}</h1>
-    <div class="row mt-5">
-        <div class="col-md-3 col-lg-2">
+    <div class="row mt-5 Grid Grid--withGutter u-margin-top-xl">
+        <div class="col-md-2 Grid-cell u-md-size1of4 u-lg-size1of6">
             <ul class="nav nav-pills">
                 {foreach $output_format_list as $name => $value}
                     <li role="presentation"
-                        class="nav-item w-100">
+                        class="nav-item w-100 u-margin-bottom-l">
                         <a class="text-decoration-none nav-link{if $value|eq('turtle')} active{/if}"
                            data-value="{$value}"
                            data-header="{$header_format_list[$name][0]}"
@@ -26,7 +26,7 @@
                 {/foreach}
             </ul>
         </div>
-        <div class="col-md-9 col-lg-10">
+        <div class="col-md-10 Grid-cell u-md-size3of4 u-lg-size5of6">
             <pre class="response" style="font-size: .8em"></pre>
         </div>
     </div>
