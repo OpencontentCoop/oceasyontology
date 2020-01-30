@@ -52,7 +52,7 @@
                         var json = JSON.parse(response);
                         response = JSON.stringify(json, undefined, 2);
                     } catch (e) {
-                        console.log(e);
+                        //console.log(e);
                     }
                     $('pre.response').html(response);
                 },
@@ -62,11 +62,12 @@
             });
         };
         $('.nav-pills a').on('click', function (e) {
-            $('.nav-pills a.active').removeClass('active');
-            $(this).addClass('active');
+            $('.nav-pills a.active').removeClass('active').css('font-weight', 'normal');
+            $(this).addClass('active').css('font-weight', 'bold');
             e.preventDefault();
             loadData();
         });
+        $('.nav-pills a.active').css('font-weight', 'bold');
         loadData();
     });
     {/literal}</script>
