@@ -17,7 +17,7 @@ if (!$contentClass instanceof eZContentClass) {
 
 $newSlug = false;
 if ($http->hasPostVariable('slug') && $http->postVariable('slug') !== 'new') {
-    $newSlug = eZCharTransform::instance()->transformByGroup($http->postVariable('slug'), 'identifier');
+    $newSlug = eZCharTransform::instance()->transformByGroup($http->postVariable('slug'), 'urlalias');
 }
 
 $newMapping = false;

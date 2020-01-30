@@ -114,10 +114,10 @@ class Map implements \JsonSerializable
 
     public function getFlatMapping()
     {
-        if ($this->flatMapping === null){
+        if ($this->flatMapping === null) {
             $this->flatMapping = [];
-            foreach ($this->mapping as $field => $onto){
-                foreach ($onto as $uris){
+            foreach ($this->mapping as $field => $onto) {
+                foreach ($onto as $uris) {
                     foreach ($uris as $uri) {
                         $this->flatMapping[$field][$uri] = $uri;
                     }
@@ -126,6 +126,24 @@ class Map implements \JsonSerializable
         }
 
         return $this->flatMapping;
+    }
+
+    public function hasClassUri($uri)
+    {
+        $classUriList = $this->getFlatMapping()['_class'];
+
+        return in_array($uri, $classUriList);
+    }
+
+    public function getClassUriPrefixList()
+    {
+        $classUriList = $this->getFlatMapping()['_class'];
+        $prefixList = [];
+        foreach ($classUriList as $classUri){
+            $prefixList[] = ConverterHelper::getUriPrefix($classUri);
+        }
+
+        return $prefixList;
     }
 
     public static function camelize($string, $delimiter = '_')
