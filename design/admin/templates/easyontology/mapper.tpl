@@ -49,7 +49,7 @@
                                 <div class="element inspect">
                                 <input type="checkbox"
                                        data-uri="{$uri|wash()}"
-                                       {foreach $property as $key => $value}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
+                                       {foreach $property as $key => $value}{if $key|eq('uri_basename')}{skip}{/if}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
                                        value="{$uri|wash}"
                                        {if and(is_set($map.mapping[$field][$onto]), $map.mapping[$field][$onto]|contains($uri))}checked="checked"{/if}
                                        name="mapping[{$field}][{$onto}][]">
@@ -88,7 +88,7 @@
                                            {if and(is_set($map.mapping[$field.identifier][$onto]), $map.mapping[$field.identifier][$onto]|contains($uri))}checked="checked"{/if}
                                            name="mapping[{$field.identifier}][{$onto}][]"
                                            data-uri="{$uri|wash()}"
-                                           {foreach $property as $key => $value}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
+                                           {foreach $property as $key => $value}{if $key|eq('uri_basename')}{skip}{/if}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
                                            value="{$uri|wash}">
                                     <span>{if is_set($property['rdfs:label'])}{$property['rdfs:label']|wash()} ({$property['uri_basename']|wash()}){else}{$property['uri_basename']|wash()}{/if}</span>
                                 </div>

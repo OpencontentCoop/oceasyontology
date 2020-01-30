@@ -45,6 +45,7 @@
                         <td>
                             <dl>
                             {foreach $map.properties[$uri] as $key => $value}
+                                {if $key|eq('uri_basename')}{skip}{/if}
                                 <dt>{$key|wash()}</dt>
                                 <dd>{$value|wash()}</dd>
                             {/foreach}
