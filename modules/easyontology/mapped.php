@@ -11,7 +11,7 @@ $tpl = eZTemplate::factory();
 
 $contentClass = eZContentClass::fetchByIdentifier($classIdentifier);
 if (!$contentClass instanceof eZContentClass) {
-    return $Module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
+    return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
 }
 
 $tpl->setVariable('class', $contentClass);
@@ -35,6 +35,8 @@ try {
 
 $tpl->setVariable('collection', $collection->jsonSerialize());
 $tpl->setVariable('locale', eZLocale::currentLocaleCode());
+$tpl->setVariable('class', $contentClass);
+
 
 
 $Result = array();

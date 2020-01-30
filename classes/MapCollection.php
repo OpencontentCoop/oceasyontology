@@ -7,8 +7,6 @@ class MapCollection implements \JsonSerializable
 {
     private $classIdentifier;
 
-    private $classSchema;
-
     /**
      * @var Map[]
      */
@@ -24,7 +22,6 @@ class MapCollection implements \JsonSerializable
     {
         $collection = new MapCollection();
         $collection->setClassIdentifier($data['classIdentifier']);
-        $collection->setClassSchema($data['classSchema']);
         foreach ($data['maps'] as $map) {
             $collection->addMap(Map::createFromArray($map));
         }
@@ -98,22 +95,6 @@ class MapCollection implements \JsonSerializable
     }
 
     /**
-     * @return mixed
-     */
-    public function getClassSchema()
-    {
-        return $this->classSchema;
-    }
-
-    /**
-     * @param mixed $classSchema
-     */
-    public function setClassSchema($classSchema)
-    {
-        $this->classSchema = $classSchema;
-    }
-
-    /**
      * @param $slug
      * @return bool|Map
      */
@@ -137,7 +118,6 @@ class MapCollection implements \JsonSerializable
 
         return [
             'classIdentifier' => $this->classIdentifier,
-            'classSchema' => $this->classSchema,
             'maps' => $maps
         ];
     }

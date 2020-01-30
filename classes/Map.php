@@ -12,6 +12,8 @@ class Map implements \JsonSerializable
 
     private $mapping = [];
 
+    //private $groups = [];
+
     private $properties;
 
     private $classes;
@@ -37,6 +39,7 @@ class Map implements \JsonSerializable
             'slug' => $this->slug,
             'ontologies' => $this->ontologies,
             'mapping' => $this->mapping,
+            //'groups' => $this->groups,
         ];
     }
 
@@ -111,6 +114,22 @@ class Map implements \JsonSerializable
     {
         $this->mapping = $mapping;
     }
+
+//    public function getGroups(): array
+//    {
+//        return $this->groups;
+//    }
+
+//    public function addGroup($identifier, $group)
+//    {
+//        $this->groups[$identifier] = $group;
+//    }
+
+
+//    public function setGroups(array $groups)
+//    {
+//        $this->groups = $groups;
+//    }
 
     public function getFlatMapping()
     {

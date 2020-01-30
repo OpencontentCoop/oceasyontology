@@ -2,8 +2,6 @@
 
 namespace Opencontent\Easyontology;
 
-use Opencontent\Opendata\Api\ClassRepository;
-
 class MapperRegistry
 {
     const MAP_PREFIX = 'eo_map_';
@@ -55,11 +53,8 @@ class MapperRegistry
         if ($siteData) {
             $collection = MapCollection::createFromJsonString($siteData->attribute('value'));
         } else {
-            $classRepository = new ClassRepository();
-            $classSchema = $classRepository->load($classIdentifier);
             $collection = MapCollection::createFromArray([
                 'classIdentifier' => $classIdentifier,
-                'classSchema' => json_decode(json_encode($classSchema), true),
                 'maps' => []
             ]);
         }

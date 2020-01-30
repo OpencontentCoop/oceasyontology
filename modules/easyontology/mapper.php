@@ -82,8 +82,7 @@ try {
         $mapping = [];
         $mapProperties = array_keys($map->getProperties());
         $mapGroupedProperties = $map->getGroupedProperties();
-        foreach ($collection->getClassSchema()['fields'] as $field){
-            $identifier = $field['identifier'];
+        foreach ($contentClass->dataMap() as $identifier => $field){
             $identifierCamelized = Map::camelize($identifier);
             foreach ($mapGroupedProperties as $onto => $mapProperties) {
                 foreach ($mapProperties as $uri => $mapProperty) {

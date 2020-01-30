@@ -4,7 +4,7 @@
 </div>
 {else}
 <h2>
-    {$collection.classSchema.name[$locale]|wash()} - {$map.slug|wash()}
+    {$class.name|wash()} - {$map.slug|wash()}
     <a href="{concat('easyontology/mapper/', $collection.classIdentifier, '/', $map.slug)|ezurl(no)}"><img src={"edit.gif"|ezimage} alt="{'Edit'|i18n( 'easyontology/dashboard' )}" /></a>
 </h2>
 
@@ -30,11 +30,11 @@
     {/foreach}
 
 
-    {foreach $collection.classSchema.fields as $field sequence array( bglight, bgdark ) as $sequence}
+    {foreach $class.data_map as $identifier => $field sequence array( bglight, bgdark ) as $sequence}
         <tr class="{$sequence}">
             <td>
-                <p><strong>{$field.name[$locale]|wash()}</strong> - {$field.identifier}</p>
-                <p><em>{$field.dataType|wash()}</em></p>
+                <p><strong>{$field.name|wash()}</strong> - {$field.identifier}</p>
+                <p><em>{$field.data_type_string|wash()}</em></p>
             </td>
             <td>
                 {if is_set($map.flat_mapping[$field.identifier])}
@@ -49,7 +49,7 @@
                                 <dd>{$value|wash()}</dd>
                             {/foreach}
                                 <dt>Converter</dt>
-                                <dd>{easyontology_converter_name($map.properties[$uri], hash('datatype', $field.dataType))}</dd>
+                                <dd>{easyontology_converter_name($map.properties[$uri], hash('datatype', $field.data_type_string))}</dd>
                             </dl>
                         </td>
                     </tr>
