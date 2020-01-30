@@ -13,6 +13,7 @@
         <div class="col-md-2 Grid-cell u-md-size1of4 u-lg-size1of6">
             <ul class="nav nav-pills">
                 {foreach $output_format_list as $name => $value}
+                    {if array('png', 'gif', 'svg')|contains($value)}{skip}{/if} {*@todo*}
                     <li role="presentation"
                         class="nav-item w-100 u-margin-bottom-l">
                         <a class="text-decoration-none nav-link{if $value|eq('turtle')} active{/if}"
