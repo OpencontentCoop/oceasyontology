@@ -46,7 +46,7 @@
                         <div class="block">
                         <legend>{$onto}</legend>
                             {foreach $classes as $uri => $property}
-                                <div class="element">
+                                <div class="element inspect">
                                 <input type="checkbox"
                                        data-uri="{$uri|wash()}"
                                        {foreach $property as $key => $value}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
@@ -72,24 +72,29 @@
                     <p>{$field.description|wash()}</p>
                     <p><em>{$field.data_type_string|wash()}</em></p>
                 </td>
-                <td>
+                <td id="field-{$field.identifier}">
+                    <fieldset>
+                        <input type="text" name="search" value="" class="search" data-field="{$field.identifier}" placeholder="">
+                    </fieldset>
                     <label for="{$field.identifier}"
                            class="hidden hide">{'Map %field_name% to'|i18n( 'easyontology/dashboard',,hash('%field_name%', $field.name|wash()) )}</label>
                     {foreach $map.grouped_properties as $onto => $properties}
+                        {if count($properties)|gt(0)}
                         <div class="block">
                             <legend>{$onto}</legend>
                             {foreach $properties as $uri => $property}
-                                <div class="element">
+                                <div class="element inspect">
                                     <input type="checkbox"
                                            {if and(is_set($map.mapping[$field.identifier][$onto]), $map.mapping[$field.identifier][$onto]|contains($uri))}checked="checked"{/if}
                                            name="mapping[{$field.identifier}][{$onto}][]"
                                            data-uri="{$uri|wash()}"
                                            {foreach $property as $key => $value}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
                                            value="{$uri|wash}">
-                                    {if is_set($property['rdfs:label'])}{$property['rdfs:label']|wash()} ({$property['uri_basename']|wash()}){else}{$property['uri_basename']|wash()}{/if}
+                                    <span>{if is_set($property['rdfs:label'])}{$property['rdfs:label']|wash()} ({$property['uri_basename']|wash()}){else}{$property['uri_basename']|wash()}{/if}</span>
                                 </div>
                             {/foreach}
                         </div>
+                        {/if}
                     {/foreach}
                 </td>
             </tr>
@@ -145,17 +150,32 @@
     </table>
 </form>
 {/if}
+
+{ezscript_require(array('ezjsc::jquery', 'jquery.quicksearch.js'))}
 <script>{literal}
     $(document).ready(function () {
-        var mapSelector = $('.map-selector');
-        mapSelector.on('change', function () {
-            var mapSelected = $(this).parent().find('.map-selected');
-            mapSelected.empty();
-            var data = $(this).find('option:selected').data();
-            $.each(data, function (k, v) {
-                $('<dt>' + k + '</dt>').appendTo(mapSelected);
-                $('<dd>' + v + '</dd>').appendTo(mapSelected);
+        $('input.search').each(function () {
+            var field = $(this).data('field');
+            $(this).quicksearch('td#field-'+field+' div.inspect span', {
+                'show': function () {
+                    this.style.color = '';
+                },
+                'hide': function () {
+                    this.style.color = '#ccc';
+                }
             });
         });
+        var inspect = $('.inspect');
+        var legend = $('#mapper-inspector');
+        inspect.on('mouseover', function () {
+            legend.empty();
+            var data = $(this).find('input').data();
+            $.each(data, function (k, v) {
+                $('<dt>' + k + '</dt>').appendTo(legend);
+                $('<dd>' + v + '</dd>').appendTo(legend);
+            });
+        }).on('mouseout', function () {
+            legend.empty();
+        });
     });
-    {/literal}</script>
+{/literal}</script>

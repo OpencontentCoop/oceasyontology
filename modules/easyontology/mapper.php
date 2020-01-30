@@ -115,7 +115,7 @@ $tpl->setVariable('locale', eZLocale::currentLocaleCode());
 
 $Result = array();
 $Result['content'] = $tpl->fetch('design:easyontology/mapper.tpl');
-$Result['left_menu'] = false;
+$Result['left_menu'] = 'design:easyontology/leftmenu.tpl';
 $Result['path'] = array(
     array('url' => 'easyontology/dashboard', 'text' => 'Easy ontology dashboard'),
     array('url' => false, 'text' => $contentClass->attribute('name') . ' mapper')
