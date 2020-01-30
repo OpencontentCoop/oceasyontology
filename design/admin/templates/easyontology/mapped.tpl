@@ -40,9 +40,10 @@
                 {if is_set($map.flat_mapping[$field.identifier])}
                 <table style="width: 100%">
                 {foreach $map.flat_mapping[$field.identifier] as $uri}
+                    {def $converter = easyontology_converter_name($map.properties[$uri], hash('datatype', $field.data_type_string))}
                     <tr class="{$sequence}">
                         <td width="50%">{$uri|wash()}</td>
-                        <td>
+                        <td{if $converter|eq('?')} class="bg-danger danger" style="background: #ed969e"{/if}>
                             <dl>
                             {foreach $map.properties[$uri] as $key => $value}
                                 {if $key|eq('uri_basename')}{skip}{/if}
@@ -50,10 +51,11 @@
                                 <dd>{$value|wash()}</dd>
                             {/foreach}
                                 <dt>Converter</dt>
-                                <dd>{easyontology_converter_name($map.properties[$uri], hash('datatype', $field.data_type_string))}</dd>
+                                <dd>{$converter|wash()}</dd>
                             </dl>
                         </td>
                     </tr>
+                    {undef $converter}
                 {/foreach}
                 </table>
                 {/if}
