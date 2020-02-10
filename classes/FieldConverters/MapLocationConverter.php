@@ -9,6 +9,7 @@ use Opencontent\Easyontology\Map;
 class MapLocationConverter extends AbstractFieldConverter
 {
     const SCHEMA_GEO = 'http://schema.org/GeoCoordinates';
+    const SCHEMA_POSTAL = 'http://schema.org/PostalAddress';
 
     public function convert($dataByLanguage, $mapToUri, Map $classMap, $content)
     {
@@ -25,6 +26,13 @@ class MapLocationConverter extends AbstractFieldConverter
                 ConverterHelper::compactUri("http://schema.org/address", $this->context) => $data['content']['address'],
                 ConverterHelper::compactUri("http://schema.org/latitude", $this->context) => $data['content']['latitude'],
                 ConverterHelper::compactUri("http://schema.org/longitude", $this->context) => $data['content']['longitude'],
+            ];
+        }
+
+        if ($this->rdfRange == self::SCHEMA_POSTAL) {
+            $values = [
+                "@type" => ConverterHelper::compactUri(self::SCHEMA_POSTAL, $this->context),
+                ConverterHelper::compactUri("http://schema.org/streetAddress", $this->context) => $data['content']['address'],                
             ];
         }
 
