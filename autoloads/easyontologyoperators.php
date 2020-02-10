@@ -4,7 +4,10 @@ class EasyontologyOperators extends eZTemplateOperator
 {
     function operatorList()
     {
-        return ['easyontology_converter_name'];
+        return [
+            'easyontology_converter_name',
+            'easyontology_to_json',
+        ];
     }
 
     function namedParameterList()
@@ -13,6 +16,9 @@ class EasyontologyOperators extends eZTemplateOperator
             'easyontology_converter_name' => [
                 'properties' => ['required' => true, 'type' => 'array'],
                 'definition' => ['required' => true, 'type' => 'array'],
+            ],
+            'easyontology_to_json' => [
+                'concept' => ['required' => true, 'type' => 'string'],                
             ]
         ];
     }
@@ -25,6 +31,20 @@ class EasyontologyOperators extends eZTemplateOperator
     function modify($tpl, $operatorName, &$operatorParameters, &$rootNamespace, &$currentNamespace, &$operatorValue, &$namedParameters)
     {
         switch ($operatorName) {
+            
+            case 'easyontology_to_json':
+                $id = (int)$operatorValue;
+                $concept = $namedParameters['concept'];
+                try {
+                    $converter = \Opencontent\Easyontology\ConverterFactory::factory($concept, $id);
+                    $operatorValue = json_encode($converter->jsonSerialize());
+                } catch (Exception $e) {                    
+                    eZDebug::writeError($e->getMessage());
+                    $operatorValue = false;
+                }
+
+                break;
+
             case 'easyontology_converter_name':
                 $properties = $namedParameters['properties'];
                 $definition = $namedParameters['definition'];
