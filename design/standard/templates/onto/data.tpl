@@ -4,7 +4,7 @@
     </div>
 {else}
 <div class="p-3 u-padding-all-xl">
-    <h1 data-uri="{$uri|wash()}">{$uri|wash()}</h1>
+    <h2 data-uri="{$uri|wash()}">{$uri|wash()}</h2>
     <div class="row mt-5 Grid Grid--withGutter u-margin-top-xl">
         <div class="col-md-3 Grid-cell u-md-size1of4 u-lg-size1of6">
             <ul class="nav nav-pills">
@@ -26,7 +26,7 @@
         </div>
         <div class="col-md-9 Grid-cell u-md-size3of4 u-lg-size5of6">
             <p class="currenturi pb-2" style="display: none;">
-                Direct url: <a target="_blank" data-currenturi="{$uri}" href="{$uri}">{$uri|wash()}</a>
+                Direct url: <a target="_blank" href="{$uri}">{$uri|wash()}</a>
             </p>
             <pre class="response" style="display: none;font-size: .8em;background:#eee;padding: 5px 10px;border-radius: 5px;"></pre>
             <div class="spinner text-center">
@@ -67,7 +67,7 @@
                         //console.log(e);
                     }
                     spinner.hide();
-                    var currentUri = currentUriContainer.find('a').data('currenturi')+'.'+ext;
+                    var currentUri = uri+'.'+ext;
                     currentUriContainer.find('a').attr('href', currentUri).html(currentUri);
                     currentUriContainer.show();
                     preContainer.html(response).show();

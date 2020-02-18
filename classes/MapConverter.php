@@ -120,20 +120,25 @@ class MapConverter extends AbstractConverter
 
     private function getCurrentOrganizationDataByLanguage()
     {
-        return [
-            'ita-IT' => [
-                'id' => '_current_organization',
-                'version' => 1,
-                'identifier' => '_current_organization',
-                'datatype' => 'ezobjectrelation',
-                'content' => [
-                    [
-                        'id' => 16322,
-                        'classIdentifier' => 'public_organization'
-                    ]
-                ]
-            ]
-        ];
+        $data = [];
+        $homepage = \eZContentObjectTreeNode::fetch((int)\eZINI::instance('content.ini')->variable('NodeSettings', 'RootNode'));
+        if ($homepage instanceof \eZContentObjectTreeNode){
+            $homeContent = Content::createFromEzContentObject($homepage->object());
+            foreach ($homeContent->data as $language => $fields){
+                $locale = explode('-', \eZLocale::instance($language)->httpLocaleCode());
+                $locale = substr(strtolower($locale[0]), 0, 2);
+                foreach ($fields as $field) {
+                    list($classIdentifier, $fieldIdentifier) = explode('/', $field['identifier']);
+                    if ($fieldIdentifier == 'current_organization') {
+                        if (!empty($field['content'])) {
+                            $data[$locale] = $field;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $data;
     }
 
     private function convertField($dataByLanguage, $uri)
