@@ -38,7 +38,7 @@ class LiteralConverter extends AbstractFieldConverter
         return $values;
     }
 
-    private function cleanValue($value)
+    protected function cleanValue($value)
     {
         $value = strip_tags($value);
         $value = trim($value);

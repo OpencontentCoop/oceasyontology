@@ -1,5 +1,5 @@
 {if is_set($error)}
-<div class="alert alert-danger">
+<div class="alert alert-danger message-error">
     {$error|wash()}
 </div>
 {else}
@@ -43,7 +43,7 @@
                     {def $converter = easyontology_converter_name($map.properties[$uri], hash('datatype', $field.data_type_string))}
                     <tr class="{$sequence}">
                         <td width="50%">{$uri|wash()}</td>
-                        <td{if $converter|eq('?')} class="bg-danger danger" style="background: #ed969e"{/if}>
+                        <td{if $converter|eq('?')} class="bg-danger danger" style="background: #ed969e"{elseif $converter|eq('Opencontent\Easyontology\FieldConverters\FallbackConverter')} class="bg-warning warning" style="background: #fcf8e3"{/if}>
                             <dl>
                             {foreach $map.properties[$uri] as $key => $value}
                                 {if $key|eq('uri_basename')}{skip}{/if}
@@ -59,8 +59,38 @@
                 {/foreach}
                 </table>
                 {/if}
-            </tr>
+            </td>
         </tr>
     {/foreach}
+
+    <tr style="background: #DAE9EE">
+        <td>
+            <p><strong><em>Current Public Organization</em></strong></p>
+        </td>
+        <td>
+            {if is_set($map.flat_mapping['_current_organization'])}
+                <table style="width: 100%">
+                    {foreach $map.flat_mapping['_current_organization'] as $uri}
+                        {def $converter = easyontology_converter_name($map.properties[$uri], hash('datatype', 'ezobjectrelation'))}
+                        <tr style="background: #DAE9EE">
+                            <td width="50%">{$uri|wash()}</td>
+                            <td{if $converter|eq('?')} class="bg-danger danger" style="background: #ed969e"{elseif $converter|eq('Opencontent\Easyontology\FieldConverters\FallbackConverter')} class="bg-warning warning" style="background: #fcf8e3"{/if}>
+                                <dl>
+                                    {foreach $map.properties[$uri] as $key => $value}
+                                        {if $key|eq('uri_basename')}{skip}{/if}
+                                        <dt>{$key|wash()}</dt>
+                                        <dd>{$value|wash()}</dd>
+                                    {/foreach}
+                                    <dt>Converter</dt>
+                                    <dd>{$converter|wash()}</dd>
+                                </dl>
+                            </td>
+                        </tr>
+                        {undef $converter}
+                    {/foreach}
+                </table>
+            {/if}
+        </td>
+    </tr>
 </table>
 {/if}

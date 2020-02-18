@@ -15,6 +15,7 @@ class ConverterHelper
     {
         $short = RdfNamespace::shorten($uri);
         if (!$short) {
+            $namespaces = RdfNamespace::namespaces();
             $uriParts = self::generateCompactUriParts($uri);
             RdfNamespace::set($uriParts['prefix'], $uriParts['long']);
             $short = RdfNamespace::shorten($uri);

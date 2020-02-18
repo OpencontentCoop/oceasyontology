@@ -5,6 +5,12 @@ $module = $Params["Module"];
 $concept = $Params["Concept"];
 $id = $Params["ID"];
 
+$suffix = false;
+if (strpos($id, '.') !== false){
+    $suffix = eZFile::suffix($id);
+    $id = str_replace('.' . $suffix, '', $id);
+}
+
 $headersOptions = $headers = [];
 $outputFormatOptions = [];
 $error = false;
@@ -19,13 +25,41 @@ foreach (\EasyRdf\Format::getFormats() as $format) {
 
 $requestAccept = strtolower($_SERVER['HTTP_ACCEPT']);
 $getFormat = isset($_GET['format']) ? $_GET['format'] : null;
+$getDebug = isset($_GET['debug']) ? true : false;
+$getEncode = isset($_GET['encode']) ? true : false;
+
+switch ($suffix){
+    case 'php':
+    case 'json':
+    case 'jsonld':
+    case 'dot':
+    case 'n3':
+        $getFormat = $suffix;
+        break;
+    case 'nt':
+        $getFormat = 'ntriples';
+        break;
+    case 'ttl':
+        $getFormat = 'turtle';
+        break;
+    case 'rdf':
+        $getFormat = 'rdfxml';
+        break;
+}
+
+if ($requestAccept == 'application/ld+json' || $getFormat == 'jsonld'){
+    $getDebug = true;
+}
+
 try {
     $converter = \Opencontent\Easyontology\ConverterFactory::factory($concept, $id);
     $jsonData = $converter->jsonSerialize();
 
-    if (isset($_GET['debug'])) {
-        header('Content-Type: application/json');
-        echo json_encode($jsonData);
+    if ($getDebug) {
+        if (!$getEncode) {
+            header('Content-Type: application/json');
+        }
+        print json_encode($jsonData);
         eZExecution::cleanExit();
     }
 
@@ -41,7 +75,7 @@ try {
             $output = var_export($output, true);
         }
 
-        if (isset($_GET['encode'])) {
+        if ($getEncode) {
             if (strpos($requestAccept, 'json') !== false){
                 print $output;
             }else {

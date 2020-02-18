@@ -10,8 +10,12 @@ class RelationConverter extends AbstractFieldConverter
 {
     public function convert($dataByLanguage, $mapToUri, Map $classMap, $content)
     {
+        $values = [];
         foreach ($dataByLanguage as $locale => $data){
             foreach ($data['content'] as $content) {
+                if (isset($values[$content['id']])){
+                    continue;
+                }
                 $doc = $this->getDoc($content);
                 if ($doc) {
                     $values[$content['id']] = $doc;

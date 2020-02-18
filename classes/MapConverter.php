@@ -93,9 +93,10 @@ class MapConverter extends AbstractConverter
 
     private function convertFields()
     {
+        $flatMapping = $this->map->getFlatMapping();
         foreach ($this->contentData as $fieldIdentifier => $dataByLanguage){
-            if (isset($this->map->getFlatMapping()[$fieldIdentifier])){
-                foreach ($this->map->getFlatMapping()[$fieldIdentifier] as $uri){
+            if (isset($flatMapping[$fieldIdentifier])){
+                foreach ($flatMapping[$fieldIdentifier] as $uri){
                     $convertedField = $this->convertField($dataByLanguage, $uri);
                     if ($convertedField) {
                         $this->doc[ConverterHelper::compactUri($uri, $this->context)] = $convertedField;
@@ -103,6 +104,36 @@ class MapConverter extends AbstractConverter
                 }
             }
         }
+
+        $currentOrganizationDataByLanguage = $this->getCurrentOrganizationDataByLanguage();
+        if ($currentOrganizationDataByLanguage) {
+            if (isset($flatMapping['_current_organization'])) {
+                foreach ($flatMapping['_current_organization'] as $uri) {
+                    $convertedField = $this->convertField($currentOrganizationDataByLanguage, $uri);
+                    if ($convertedField) {
+                        $this->doc[ConverterHelper::compactUri($uri, $this->context)] = $convertedField;
+                    }
+                }
+            }
+        }
+    }
+
+    private function getCurrentOrganizationDataByLanguage()
+    {
+        return [
+            'ita-IT' => [
+                'id' => '_current_organization',
+                'version' => 1,
+                'identifier' => '_current_organization',
+                'datatype' => 'ezobjectrelation',
+                'content' => [
+                    [
+                        'id' => 16322,
+                        'classIdentifier' => 'public_organization'
+                    ]
+                ]
+            ]
+        ];
     }
 
     private function convertField($dataByLanguage, $uri)

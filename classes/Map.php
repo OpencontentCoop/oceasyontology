@@ -178,7 +178,13 @@ class Map implements \JsonSerializable
         $properties = $this->getGroupedProperties();
         $flatProperties = [];
         foreach ($properties as $uri => $propertyList) {
-            $flatProperties = array_merge($flatProperties, $propertyList);
+            foreach ($propertyList as $propertyName => $propertyValues){
+                if (isset($flatProperties[$propertyName])){
+                    $flatProperties[$propertyName] = array_merge($flatProperties[$propertyName], $propertyValues);
+                }else{
+                    $flatProperties[$propertyName] = $propertyValues;
+                }
+            }
         }
 
         return $flatProperties;

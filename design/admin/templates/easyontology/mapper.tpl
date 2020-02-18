@@ -1,5 +1,5 @@
 {if is_set($error)}
-    <div class="alert alert-danger">
+    <div class="alert alert-danger message-error">
         {$error|wash()}
     </div>
 {else}
@@ -99,6 +99,40 @@
                 </td>
             </tr>
         {/foreach}
+
+        <tr style="background: #DAE9EE">
+            <td>
+                <p>
+                    {*<input type="checkbox" name="group[]" value="{$field.identifier}" />*}
+                    <strong><em>Current Public Organization</em></strong>
+                </p>
+            </td>
+            <td id="field-_current_organization">
+                <fieldset>
+                    <input type="text" name="search" value="" class="search" data-field="_current_organization" placeholder="">
+                </fieldset>
+                <label for="_current_organization"
+                       class="hidden hide">{'Map current organization to'|i18n( 'easyontology/dashboard' )}</label>
+                {foreach $map.grouped_properties as $onto => $properties}
+                    {if count($properties)|gt(0)}
+                        <div class="block">
+                            <legend>{$onto}</legend>
+                            {foreach $properties as $uri => $property}
+                                <div class="element inspect">
+                                    <input type="checkbox"
+                                           {if and(is_set($map.mapping['_current_organization'][$onto]), $map.mapping['_current_organization'][$onto]|contains($uri))}checked="checked"{/if}
+                                           name="mapping[_current_organization][{$onto}][]"
+                                           data-uri="{$uri|wash()}"
+                                            {foreach $property as $key => $value}{if $key|eq('uri_basename')}{skip}{/if}data-{$key|explode(':')|implode('_')|wash()}="{$value|wash()}"{/foreach}
+                                           value="{$uri|wash}">
+                                    <span>{if is_set($property['rdfs:label'])}{$property['rdfs:label']|wash()} ({$property['uri_basename']|wash()}){else}{$property['uri_basename']|wash()}{/if}</span>
+                                </div>
+                            {/foreach}
+                        </div>
+                    {/if}
+                {/foreach}
+            </td>
+        </tr>
 
         {*
         {foreach $map.groups as $group_identifier => $fields sequence array( bglight, bgdark ) as $sequence}

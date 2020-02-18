@@ -1,3 +1,9 @@
+{if is_set($error)}
+<div class="alert alert-danger message-error">
+    {$error|wash()}
+</div>
+{/if}
+
 {if count($collections)}
     <h2>{'Mapped classes'|i18n( 'easyontology/dashboard' )}</h2>
     <table class="table list table-striped">

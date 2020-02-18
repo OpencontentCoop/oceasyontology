@@ -10,21 +10,26 @@ $script = eZScript::instance(array(
 
 $script->startup();
 
-$options = $script->getOptions('[class:][attribute:]',
+$options = $script->getOptions('[message:]',
     '',
     array(
-        'class' => 'Identificatore della classe',
-        'attribute' => "Identificatore dell'attributo"
+        'message' => 'Dump message',
     )
 );
 $script->initialize();
 $script->setUseDebugAccumulators(true);
 
+$baseDir = 'extension/oceasyontology/data/';
+
 $collections = \Opencontent\Easyontology\MapperRegistry::fetchMapCollectionList();
 $ontologies = \Opencontent\Easyontology\MapperRegistry::fetchOntologyCollection();
 
-$directory = 'extension/oceasyontology/data/' . time();
+$directory = $baseDir . time();
 eZDir::mkdir($directory, false, true);
+
+if ($options['message']) {
+    eZFile::create('message.txt', $directory, $options['message']);
+}
 
 eZFile::create('collections.json', $directory, json_encode($collections));
 eZFile::create('ontologies.json', $directory, json_encode($ontologies));

@@ -3,6 +3,7 @@
 namespace Opencontent\Easyontology;
 
 
+use Opencontent\Easyontology\FieldConverters\FallbackConverter;
 use Opencontent\Easyontology\FieldConverters\LiteralConverter;
 
 class FieldConverterFactory
@@ -74,6 +75,10 @@ class FieldConverterFactory
             if ($className) {
                 return new $className($fieldDefinition, $rdfRange, $context);
             }
+        }
+
+        if (!$rdfRange){
+            return new FallbackConverter($fieldDefinition, $rdfRange, $context);
         }
 
         return false;

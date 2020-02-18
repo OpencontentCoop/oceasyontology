@@ -6,20 +6,24 @@ use Opencontent\Easyontology\Ontology;
 /** @var eZModule $module */
 $module = $Params["Module"];
 $http = eZHTTPTool::instance();
+$tpl = eZTemplate::factory();
 
 if ($http->hasPostVariable('classIdentifier')) {
     $module->redirectTo('easyontology/mapper/' . eZHTTPTool::instance()->postVariable('classIdentifier') . '/new');
 }
 
 if ($http->hasPostVariable('source')) {
-    $ontology = new Ontology();
-    $ontology->setSource($http->postVariable('source'), $http->postVariable('format', 'rdfxml'));
-    MapperRegistry::storeOntology($ontology);
+    try {
+        $ontology = new Ontology();
+        $ontology->setSource($http->postVariable('source'), $http->postVariable('format', 'rdfxml'));
+        MapperRegistry::storeOntology($ontology);
 
-    return $module->redirectTo('easyontology/dashboard/');
+        return $module->redirectTo('easyontology/dashboard/');
+    }catch (Exception $e){
+        $tpl->setVariable('error', $e->getMessage());
+    }
 }
 
-$tpl = eZTemplate::factory();
 $collections = MapperRegistry::fetchMapCollectionList();
 $ontologies = MapperRegistry::fetchOntologyCollection();
 $alreadyMapped = [];
@@ -32,5 +36,4 @@ $tpl->setVariable('ontologies', json_decode(json_encode($ontologies), true));
 
 $Result = array();
 $Result['content'] = $tpl->fetch('design:easyontology/dashboard.tpl');
-$Result['left_menu'] = false;
 $Result['path'] = array(array('url' => false, 'text' => 'Easy ontology dashboard'));

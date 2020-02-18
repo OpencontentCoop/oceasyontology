@@ -51,7 +51,7 @@ class SourceParser
                         $this->properties[$resource->getUri()] = $properties;
                     }
                 }
-                if (($resource->hasProperty('rdf:type') && in_array($resource->get('rdf:type'), ['http://www.w3.org/2002/07/owl#Class'])
+                if (($resource->hasProperty('rdf:type') && in_array($resource->get('rdf:type'), ['http://www.w3.org/2000/01/rdf-schema#Class', 'http://www.w3.org/2002/07/owl#Class'])
                     or $resource->hasProperty('rdfs:subClassOf'))
                 ) {
                     $properties = [

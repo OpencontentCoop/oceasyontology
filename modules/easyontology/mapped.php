@@ -41,7 +41,6 @@ $tpl->setVariable('class', $contentClass);
 
 $Result = array();
 $Result['content'] = $tpl->fetch('design:easyontology/mapped.tpl');
-$Result['left_menu'] = false;
 $contentInfoArray = array( 'url_alias' => 'smartlogin/signup', 'class_identifier' => false );
 $contentInfoArray['persistent_variable'] = false;
 if ( $tpl->variable( 'persistent_variable' ) !== false )
