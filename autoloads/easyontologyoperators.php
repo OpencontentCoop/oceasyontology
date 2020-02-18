@@ -7,6 +7,7 @@ class EasyontologyOperators extends eZTemplateOperator
         return [
             'easyontology_converter_name',
             'easyontology_to_json',
+            'easyontology_links',
         ];
     }
 
@@ -19,7 +20,11 @@ class EasyontologyOperators extends eZTemplateOperator
             ],
             'easyontology_to_json' => [
                 'concept' => ['required' => true, 'type' => 'string'],                
-            ]
+            ],
+            'easyontology_links' => [
+                'class_identifier' => ['required' => true, 'type' => 'string'],
+                'object_id' => ['required' => true, 'type' => 'integer'],
+            ],
         ];
     }
 
@@ -31,7 +36,21 @@ class EasyontologyOperators extends eZTemplateOperator
     function modify($tpl, $operatorName, &$operatorParameters, &$rootNamespace, &$currentNamespace, &$operatorValue, &$namedParameters)
     {
         switch ($operatorName) {
-            
+
+            case 'easyontology_links':
+                $links = [];
+
+                $classIdentifier = $namedParameters['class_identifier'];
+                $id = $namedParameters['object_id'];
+
+                $mapCollection = \Opencontent\Easyontology\MapperRegistry::fetchMapCollectionByClassIdentifier($classIdentifier);
+                foreach ($mapCollection->getMaps() as $map){
+                    $links[$map->getSlug()] = \Opencontent\Easyontology\ConverterHelper::generateId($map->getSlug(), $id);
+                }
+
+                $operatorValue = $links;
+                break;
+
             case 'easyontology_to_json':
                 $id = (int)$operatorValue;
                 $concept = $namedParameters['concept'];

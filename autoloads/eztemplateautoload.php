@@ -7,5 +7,6 @@ $eZTemplateOperatorArray[] = array(
     'operator_names' => array(
     	'easyontology_converter_name',
     	'easyontology_to_json',
+        'easyontology_links',
     )
 );

@@ -45,7 +45,6 @@ class MapperRegistry
     /**
      * @param $classIdentifier
      * @return MapCollection
-     * @throws \Opencontent\Opendata\Api\Exception\NotFoundException
      */
     public static function fetchMapCollectionByClassIdentifier($classIdentifier)
     {
