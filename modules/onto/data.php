@@ -57,7 +57,7 @@ try {
 
     if ($getDebug) {
         if (!$getEncode) {
-            header('Content-Type: application/json');
+            header('Content-Type: application/ld+json');
         }
         print json_encode($jsonData);
         eZExecution::cleanExit();
