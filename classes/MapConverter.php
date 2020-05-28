@@ -129,7 +129,7 @@ class MapConverter extends AbstractConverter
                 $locale = substr(strtolower($locale[0]), 0, 2);
                 foreach ($fields as $field) {
                     list($classIdentifier, $fieldIdentifier) = explode('/', $field['identifier']);
-                    if ($fieldIdentifier == 'current_organization') {
+                    if ($fieldIdentifier == 'current_organization' || $fieldIdentifier == 'organization') {
                         if (!empty($field['content'])) {
                             $data[$locale] = $field;
                         }
